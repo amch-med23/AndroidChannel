@@ -20,28 +20,9 @@ android {
 }
 repositories {
     jcenter()
-    mavenCentral() // Keep mavenCentral() if you're using other libraries from there
-    maven { url "https://maven.google.com" }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.1'
-}
-// These are the CRUCIAL lines for JitPack
-group = 'com.github.amch-med23' // Your GitHub username
-version = '1.0.0' // Use semantic versioning
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-
-                groupId = 'com.github.amch-med23' // Your GitHub username
-                artifactId = 'AndroidChannel' // Your library's name
-                version = '1.0.0' // Use semantic versioning
-            }
-        }
-    }
 }
