@@ -19,6 +19,7 @@ android {
     }
 }
 repositories {
+    jcenter()
     mavenCentral() // Keep mavenCentral() if you're using other libraries from there
     maven { url "https://maven.google.com" }
 }
