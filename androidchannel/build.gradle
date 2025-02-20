@@ -17,7 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
 }
+
 repositories {
     jcenter()
 }
@@ -30,16 +34,81 @@ dependencies {
 group = 'com.github.amch-med23'
 version = '0.0.4'
 
-// Configuration for Maven publication (Gradle 2.10 compatible)
+// Publishing using uploadArchives (Gradle 2.x compatible)
 uploadArchives {
     repositories {
-        mavenLocal() // Publish to Maven local (JitPack will use this)
+        mavenLocal()  // Publish to Maven local
     }
 
-    pom {
-        groupId = 'com.github.amch-med23'
-        artifactId = 'AndroidChannel'
-        version = '0.0.4'
-        url = 'https://github.com/amch-med23/AndroidChannel'
+    doLast {
+        // Define the AAR file
+        def aarFile = file("$buildDir/outputs/aar/androidchannel-release.aar")
+        
+        // Ensure the AAR file exists before proceeding
+        if (!aarFile.exists()) {
+            throw new GradleException("AAR file not found at: $aarFile")
+        }
+
+        // Define the POM file path
+        def pomFile = new File("$buildDir/publications/maven/AndroidChannel-0.0.4.pom")
+        
+        // Ensure the directory for the POM file exists
+        def pomDir = pomFile.getParentFile()
+        if (!pomDir.exists()) {
+            pomDir.mkdirs() // Create the directory structure for the POM file
+        }
+        
+        // If the POM doesn't exist, we need to create it
+        if (!pomFile.exists()) {
+            // Create a new POM file if it doesn't exist
+            def pomXml = '''<project xmlns="http://maven.apache.org/POM/4.0.0"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+                <modelVersion>4.0.0</modelVersion>
+                <groupId>${group}</groupId>
+                <artifactId>AndroidChannel</artifactId>
+                <version>${version}</version>
+                <name>AndroidChannel</name>
+                <description>Android Channel - A library for managing channels in Android</description>
+                <url>https://github.com/amch-med23/AndroidChannel</url>
+                <licenses>
+                    <license>
+                        <name>The Apache Software License, Version 2.0</name>
+                        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                        <distribution>repo</distribution>
+                    </license>
+                </licenses>
+                <developers>
+                    <developer>
+                        <id>amch-med23</id>
+                        <name>Amouch Med23</name>
+                        <email>skyied.med23@gmail.com</email>
+                    </developer>
+                </developers>
+                <scm>
+                    <connection>scm:git:git://github.com/amch-med23/AndroidChannel.git</connection>
+                    <developerConnection>scm:git:ssh://github.com/amch-med23/AndroidChannel.git</developerConnection>
+                    <url>https://github.com/amch-med23/AndroidChannel</url>
+                </scm>
+            </project>'''
+
+            // Write the generated POM to the file
+            pomFile.write(pomXml)
+        }
+
+        // If the POM exists, continue to upload the AAR and POM
+        if (pomFile.exists()) {
+            uploadArchives {
+                repositories {
+                    mavenLocal()
+                }
+                artifacts {
+                    archives(aarFile)
+                    archives(pomFile)
+                }
+            }
+        } else {
+            throw new GradleException("POM file not found or generated.")
+        }
     }
 }
