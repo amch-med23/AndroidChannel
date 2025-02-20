@@ -40,5 +40,6 @@ uploadArchives {
         groupId = 'com.github.amch-med23'
         artifactId = 'AndroidChannel'
         version = '1.0.0'
+        url = 'https://github.com/amch-med23/AndroidChannel'
     }
 }
