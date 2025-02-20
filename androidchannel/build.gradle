@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs.dir', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.1'
 }
 
@@ -35,9 +35,10 @@ uploadArchives {
     repositories {
         mavenLocal() // Publish to Maven local (JitPack will use this)
     }
-    
-    // Create a pom.xml
-    pom.groupId = 'com.github.amch-med23'
-    pom.artifactId = 'AndroidChannel'
-    pom.version = '1.0.0'
+
+    pom {
+        groupId = 'com.github.amch-med23'
+        artifactId = 'AndroidChannel'
+        version = '1.0.0'
+    }
 }
