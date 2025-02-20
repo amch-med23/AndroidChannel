@@ -28,7 +28,7 @@ dependencies {
 }
 
 group = 'com.github.amch-med23'
-version = '1.0.0'
+version = '0.0.4'
 
 // Configuration for Maven publication (Gradle 2.10 compatible)
 uploadArchives {
@@ -39,7 +39,7 @@ uploadArchives {
     pom {
         groupId = 'com.github.amch-med23'
         artifactId = 'AndroidChannel'
-        version = '1.0.0'
+        version = '0.0.4'
         url = 'https://github.com/amch-med23/AndroidChannel'
     }
 }
